@@ -1,4 +1,9 @@
-export function HangmanFigure() {
+import { motion } from "motion/react";
+const GUESSES = 6;
+type HangmanFigureProps = {
+  reaminingGuesses: number;
+};
+export function HangmanFigure({ reaminingGuesses }: HangmanFigureProps) {
   const gallowsLine = [
     { x1: 40, y1: 180, x2: 150, y2: 180 },
     { x1: 60, y1: 20, x2: 60, y2: 180 },
@@ -17,17 +22,25 @@ export function HangmanFigure() {
       {gallowsLine.map((line, index) => (
         <line key={index} {...line} className="stroke-gray-700 stroke-[4px]" />
       ))}
-      <circle
+      <motion.circle
         cx="138"
         cy="50"
         r="10"
         className="fill-transparent stroke-pink-500 stroke-[2px]"
+        initial={{ scale: 0 }}
+        animate={{ scale: GUESSES - reaminingGuesses > 0 ? 1 : 0 }}
+        transition={{ duration: 0.5 }}
       />
-      {partsBody.map((line) => (
-        <line
+      {partsBody.map((line, index) => (
+        <motion.line
           key={line.id}
           {...line}
           className="stroke-pink-500 stroke-[2px]"
+          initial={{ pathLength: 0 }}
+          animate={{
+            pathLength: GUESSES - reaminingGuesses > index + 1 ? 1 : 0,
+          }}
+          transition={{ duration: 0.5 }}
         />
       ))}
     </svg>
